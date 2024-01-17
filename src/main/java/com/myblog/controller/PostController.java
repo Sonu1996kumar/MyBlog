@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
@@ -23,13 +25,20 @@ public class PostController {
     }
 
     //want to get post by id
-    //http://localhost:8080/api/posts?id=1
+    //http://localhost:8080/api/posts/particular?id=1
 
-    @GetMapping
+    @GetMapping("/particular")
     public ResponseEntity<PostDto> getPostById(@RequestParam long id){
        PostDto dto = postService.getPostById(id);
        return new ResponseEntity<>(dto,HttpStatus.OK);
 
+    }
+
+    //reading all data from database
+    @GetMapping
+    public List<PostDto> getAllPosts(){
+        List<PostDto> postDtos=postService.getAllPosts();
+        return postDtos;//not use responseEntity anyway bydefault response is 200;
     }
 
 }
