@@ -35,9 +35,20 @@ public class PostController {
     }
 
     //reading all data from database
+//    @GetMapping
+//    public List<PostDto> getAllPosts(){
+//        List<PostDto> postDtos=postService.getAllPosts();
+//        return postDtos;//not use responseEntity anyway bydefault response is 200;
+//    }
+
+
+    //http://localhost:8080/api/posts?pageNo=0&pageSize=5
     @GetMapping
-    public List<PostDto> getAllPosts(){
-        List<PostDto> postDtos=postService.getAllPosts();
+    public List<PostDto> getAllPosts(
+            @RequestParam(name="pageNo",required = false,defaultValue = "0") int pageNo,
+            @RequestParam(name="pageSize",required = false,defaultValue = "3") int pageSize
+    ){
+        List<PostDto> postDtos=postService.getAllPosts(pageNo,pageSize);
         return postDtos;//not use responseEntity anyway bydefault response is 200;
     }
 
