@@ -42,13 +42,40 @@ public class PostController {
 //    }
 
 
-    //http://localhost:8080/api/posts?pageNo=0&pageSize=5
+//    http://localhost:8080/api/posts?pageNo=0&pageSize=5
+//    @GetMapping
+//    public List<PostDto> getAllPosts(
+//            @RequestParam(name="pageNo",required = false,defaultValue = "0") int pageNo,
+//            @RequestParam(name="pageSize",required = false,defaultValue = "3") int pageSize
+//    ){
+//        List<PostDto> postDtos=postService.getAllPosts(pageNo,pageSize);
+//        return postDtos;//not use responseEntity anyway bydefault response is 200;
+//    }
+
+    //sorting
+
+//    //http://localhost:8080/api/posts?pageNo=0&pageSize=5&sortBy=title
+//    @GetMapping
+//    public List<PostDto> getAllPosts(
+//            @RequestParam(name="pageNo",required = false,defaultValue = "0") int pageNo,
+//            @RequestParam(name="pageSize",required = false,defaultValue = "3") int pageSize,
+//            @RequestParam(name="sortBy",required=false,defaultValue = "id") String sortBy
+//    ){
+//        List<PostDto> postDtos=postService.getAllPosts(pageNo,pageSize,sortBy);
+//        return postDtos;//not use responseEntity anyway bydefault response is 200;
+//    }
+
+
+    //contrilling over dir of sorting
+    //http://localhost:8080/api/posts?pageNo=0&pageSize=5&sortBy=title&sortDir=desc
     @GetMapping
     public List<PostDto> getAllPosts(
             @RequestParam(name="pageNo",required = false,defaultValue = "0") int pageNo,
-            @RequestParam(name="pageSize",required = false,defaultValue = "3") int pageSize
+            @RequestParam(name="pageSize",required = false,defaultValue = "3") int pageSize,
+            @RequestParam(name="sortBy",required=false,defaultValue = "id") String sortBy,
+            @RequestParam(name="sortDir",required=false,defaultValue = "id") String sortDir
     ){
-        List<PostDto> postDtos=postService.getAllPosts(pageNo,pageSize);
+        List<PostDto> postDtos=postService.getAllPosts(pageNo,pageSize,sortBy,sortDir);
         return postDtos;//not use responseEntity anyway bydefault response is 200;
     }
 

@@ -8,6 +8,7 @@ import com.myblog.service.PostService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,10 +67,35 @@ public class PostServiceImpl implements PostService {
 //    }
 
     //for pagination
+    //Override
+//    public List<PostDto> getAllPosts(int pageNo, int pageSize){
+//        Pageable pageable=PageRequest.of(pageNo,pageSize);
+//        Page<Post> pagePosts = postRepository.findAll(pageable);
+//        List<Post> posts = pagePosts.getContent();
+//
+//        List<PostDto> dtos = posts.stream().map(post -> mapToDto(post)).collect(Collectors.toList());
+//        return dtos;
+//    }
+
+    //sorting the record
+
+//    @Override
+//    public List<PostDto> getAllPosts(int pageNo, int pageSize, String sortBy){
+//        Pageable pageable=PageRequest.of(pageNo,pageSize, Sort.by(sortBy));
+//        Page<Post> pagePosts = postRepository.findAll(pageable);
+//        List<Post> posts = pagePosts.getContent();
+//
+//        List<PostDto> dtos = posts.stream().map(post -> mapToDto(post)).collect(Collectors.toList());
+//        return dtos;
+//    }
+
+
+    //control over the dir of sorting
 
     @Override
-    public List<PostDto> getAllPosts(int pageNo,int pageSize){
-        Pageable pageable=PageRequest.of(pageNo,pageSize);
+    public List<PostDto> getAllPosts(int pageNo, int pageSize, String sortBy,String sortDir){
+       Sort sort = (sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()))?Sort.by(sortBy).ascending():Sort.by(sortBy).descending();
+        Pageable pageable=PageRequest.of(pageNo,pageSize, sort);
         Page<Post> pagePosts = postRepository.findAll(pageable);
         List<Post> posts = pagePosts.getContent();
 
