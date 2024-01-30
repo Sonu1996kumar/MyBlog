@@ -1,16 +1,14 @@
 package com.myblog.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Generated;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Table(name="posts")
 @Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 public class Post {
@@ -27,4 +25,6 @@ public class Post {
     //One Post Can have multiple comments
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "post")
     private List<Comment> comments;
+
+
 }
