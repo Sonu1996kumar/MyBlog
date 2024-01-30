@@ -52,28 +52,65 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(id);
     }
 
+
+
+
+//update without postId
+//    @Override
+//    public CommentDto updateComment(long id, CommentDto commentDto) {
+//        Comment comment = commentRepository.findById(id).orElseThrow(
+//                () -> new ResourceNotFoundException("Comment Not Found for Id: " + id)
+//        );
+//
+////        by me
+////        comment.setText(commentDto.getText());
+////        comment.setEmail(commentDto.getEmail());
+////
+////        Comment savedComment=commentRepository.save(comment);
+////
+////        CommentDto dto = new CommentDto();
+////        dto.setText(savedComment.getText());
+////        dto.setEmail(savedComment.getEmail());
+////        dto.setId(savedComment.getId());
+////        return dto;
+//
+//        Comment c = mapToEntity(commentDto);
+//        c.setId(comment.getId());
+//        Comment savedComment=commentRepository.save(c);
+//
+//        return mapToDto(savedComment);
+//
+//    }
+
+
+    //update with postId
     @Override
-    public CommentDto updateComment(long id, CommentDto commentDto) {
+    public CommentDto updateComment(long id, CommentDto commentDto, long postId) {
+            Post post = postRepository.findById(id).orElseThrow(
+               () -> new ResourceNotFoundException("Post Not Found for Id: " + id)
+        );
+
         Comment comment = commentRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Comment Not Found for Id: " + id)
         );
 
-        comment.setText(commentDto.getText());
-        comment.setEmail(commentDto.getEmail());
+        Comment c = mapToEntity(commentDto);
+       c.setId(comment.getId());
+       c.setPost(post);
+       Comment savedComment=commentRepository.save(c);
 
-
-
-        Comment savedComment=commentRepository.save(comment);
-
-        CommentDto dto = new CommentDto();
-        dto.setText(savedComment.getText());
-        dto.setEmail(savedComment.getEmail());
-        dto.setId(savedComment.getId());
-
-
-        return dto;
-
-
+       return mapToDto(savedComment);
 
     }
+
+    CommentDto mapToDto(Comment comment){
+        CommentDto dto=modelMapper.map(comment,CommentDto.class);
+        return dto;
+    }
+
+    Comment mapToEntity(CommentDto commentDto){
+        Comment comment=modelMapper.map(commentDto,Comment.class);
+        return comment;
+    }
+
 }
