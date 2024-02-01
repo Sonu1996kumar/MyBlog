@@ -1,6 +1,6 @@
 package com.myblog.entity;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.*;
 
 import java.util.List;
