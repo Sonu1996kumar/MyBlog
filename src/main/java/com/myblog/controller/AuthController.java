@@ -6,13 +6,15 @@ import com.myblog.payload.LoginDto;
 import com.myblog.payload.SignUpDto;
 import com.myblog.repository.RoleRepository;
 import com.myblog.repository.UserRepository;
+import com.myblog.security.JWTAuthResponse;
+import com.myblog.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
+
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,14 +37,32 @@ public class AuthController {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private JwtTokenProvider tokenProvider;
+
+//    @PostMapping("/signin")
+//    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
+//        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(),loginDto.getPassword());
+//        //matching the password
+//        Authentication authentication= authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+//        //creating session
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        return new ResponseEntity<>("User signed-in Successfully!.",HttpStatus.OK);
+//    }
+
+    //ab jwt token generate karke karenge
+
     @PostMapping("/signin")
-    public ResponseEntity<String> authenticateUser(@RequestBody LoginDto loginDto){
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=new UsernamePasswordAuthenticationToken(loginDto.getUsernameOrEmail(),loginDto.getPassword());
-        //matching the password
-        Authentication authentication= authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-        //creating session
+    public ResponseEntity<JWTAuthResponse> authenticateUser(@RequestBody LoginDto loginDto){
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                loginDto.getUsernameOrEmail(), loginDto.getPassword()));
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new ResponseEntity<>("User signed-in Successfully!.",HttpStatus.OK);
+
+        // get token form tokenProvider
+        String token = tokenProvider.generateToken(authentication);
+
+        return ResponseEntity.ok(new JWTAuthResponse(token));
     }
 
     @PostMapping("/signup")
